@@ -1,0 +1,66 @@
+/* Touch controls for Ashar's Anime Crossover MUGEN (WebMUGEN / IKEMEN GO web).
+ *
+ * The engine listens on `document` for keydown/keyup and reads
+ * KeyboardEvent.code (see ikemen-go-web src/system_js.go: jsCodeToKey).
+ * These on-screen buttons dispatch synthetic KeyboardEvents with the same
+ * codes as the P1 keyboard layout (config.ini [Keys_P1]: WASD move,
+ * K/L/; = A/B/C, I/O/P = X/Y/Z, Enter = Start), so the engine cannot tell
+ * them apart from a real keyboard. No engine code is touched.
+ *
+ * Shown by default on touch devices (coarse pointer), hidden on desktop.
+ * The toggle button (top-right) shows/hides it anywhere; the choice is
+ * remembered in localStorage.
+ */
+#tc-toggle {
+  position: fixed; top: 10px; right: 10px; z-index: 960;
+  width: 44px; height: 28px; border-radius: 7px;
+  border: 2px solid #6af; background: #0b0d12cc; color: #d6e6ff;
+  font: bold 10px/1 system-ui, sans-serif; letter-spacing: .08em;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+#tc-toggle.off { opacity: .45; }
+#tc-root {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 940;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 0 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  pointer-events: none; /* only the buttons take input */
+}
+#tc-root.hidden { display: none; }
+.tc-cluster { display: flex; gap: 8px; pointer-events: none; }
+.tc-btn {
+  pointer-events: auto;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; border: 1.5px solid #6af;
+  background: #0b0d1280; color: #d6e6ff;
+  font: bold 13px/1 system-ui, sans-serif;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.tc-btn.pressed { background: #6af; color: #0b0d12; }
+/* D-pad: 3x3 grid, arrows on the cross */
+.tc-dpad {
+  display: grid; grid-template-columns: repeat(3, 40px);
+  grid-template-rows: repeat(3, 40px); gap: 3px;
+  pointer-events: none;
+}
+.tc-dpad .tc-btn { width: 40px; height: 40px; border-radius: 8px; font-size: 16px; }
+.tc-dpad .tc-up    { grid-area: 1 / 2; }
+.tc-dpad .tc-left  { grid-area: 2 / 1; }
+.tc-dpad .tc-right { grid-area: 2 / 3; }
+.tc-dpad .tc-down  { grid-area: 3 / 2; }
+/* Attack buttons: two rows of three */
+.tc-atk { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.tc-atk .tc-row { display: flex; gap: 6px; }
+.tc-atk .tc-btn { width: 42px; height: 42px; border-radius: 50%; }
+.tc-atk .tc-row.top .tc-btn { border-color: #ff8a7a; }
+.tc-start {
+  width: 42px; height: 42px; border-radius: 50%;
+  font-size: 10px; letter-spacing: .05em;
+}
+@media (max-width: 560px) {
+  .tc-dpad { grid-template-columns: repeat(3, 38px); grid-template-rows: repeat(3, 38px); }
+  .tc-dpad .tc-btn { width: 38px; height: 38px; }
+  .tc-atk .tc-btn, .tc-start { width: 40px; height: 40px; }
+}

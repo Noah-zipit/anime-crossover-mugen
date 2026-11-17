@@ -1,0 +1,33 @@
+{
+ "chars": {
+  "sukuna": "/home/hatch/workspace/webmugen-build/chars-v5/sukuna",
+  "gojo": "/home/hatch/workspace/webmugen-build/chars-v5/gojo",
+  "meliodas": "/home/hatch/workspace/webmugen-build/chars-v5/meliodas",
+  "escanor": "/home/hatch/workspace/webmugen-build/chars-v5/escanor"
+ },
+ "stages": {
+  "garden": "/home/hatch/workspace/webmugen-build/stages-dl/garden-sand-land",
+  "stadium": "/home/hatch/workspace/webmugen-build/stages-dl/pokemon-stadium"
+ },
+ "remove": [
+  "data/mugen1/",
+  "data/big/",
+  "data/system.base.def",
+  "chars/sakura/",
+  "chars/RyuDX/",
+  "chars/kfm/",
+  "chars/goku/",
+  "chars/ss3goku/",
+  "chars/goku-ismael/",
+  "chars/vegeta/",
+  "chars/dio/",
+  "chars/jotaro/",
+  "chars/blackpolnareff/",
+  "chars/vanillaice/"
+ ],
+ "select_def": "[Characters]\nsukuna/Sukuna Manga (Full).def\ngojo/Gojo Manga (Full).def\nmeliodas/Meliodas.def\nescanor/Escanor.def\n\n[ExtraStages]\nstages/garden/GardenSandLand_1.1Zoom.def\nstages/stadium/Stadium.def\nstages/kfm.def\nstages/stage0.def\nstages/stage1.def\nstages/stageZ.def\nstages/interactivestage.def\n\n[Options]\narcade.maxmatches = 2,0,0,0,0,0,0,0,0,0\nteam.maxmatches = 2,0,0,0,0,0,0,0,0,0\n",
+ "motif_select_grid": {
+  "columns": 4,
+  "rows": 1
+ }
+}

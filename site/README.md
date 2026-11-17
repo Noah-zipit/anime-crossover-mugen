@@ -1,23 +1,25 @@
-# Anime Crossover MUGEN
+# Cursed Clash
 
 A browser-playable anime crossover fighting game. Free, no install, no account.
 
 - **Play:** open the site. Pick a fighter, pick a stage, fight.
-  Keyboard: W/A/S/D to move, I/O/P for X/Y/Z, K/L/; for A/B/C, Enter for Start.
-  Gamepads work too. On a phone, use the on-screen touch buttons.
-  Add `?p1=dio/dio.def&p2=jotaro/jotaro.def` to the address to jump
+  Keyboard: W/A/S/D to move, I/O/P for X/Y/Z, K/L/; for A/B/C, Enter for Start,
+  Esc pauses. Gamepads work too. On a phone, the on-screen buttons are
+  labelled with the move they send: light/medium/heavy punch and kick,
+  charge (also Start), pause, and a move list.
+  Add `?p1=meliodas/Meliodas.def&p2=escanor/Escanor.def` to the address to jump
   straight into a fight.
-- **Roster (8):** Goku, Vegeta, Dio, Jotaro, Gojo, Sukuna, Meliodas, Escanor.
-- **Stages:** GardenSandLand, Pokémon Stadium, plus the bundled defaults.
+- **Roster (4):** Sukuna, Gojo, Meliodas, Escanor.
+- **Stages:** GardenSandLand, plus the bundled defaults.
 - **Modes:** Arcade, Versus, Team, Survival, Training, Watch.
   Online versus works peer-to-peer (copy-paste connect, no server).
-- **Add characters:** open `studio.html` (Mod Studio), drop in MUGEN
+- **Add characters:** open `studio.html` (Mod Studio), drop in
   character folders, press Build & Play. Characters and stages are
   fan-made community content; keep it free and non-commercial.
 
 ## What this is built from
 
-The published WebMUGEN 2.3 build by energyjp — the real IKEMEN GO engine
+The published IKEMEN GO web build by energyjp — the real IKEMEN GO engine
 (MIT) compiled to WebAssembly — with the game as the landing page instead
 of the Studio. Nothing about the engine was rewritten. See `CREDITS.md`.
 

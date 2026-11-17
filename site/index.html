@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Anime Crossover MUGEN</title>
+<title>Cursed Clash</title>
 <style>
   html, body { background: #111; color: #eee; font-family: monospace; margin: 0; padding: 12px; }
   #apptitle { font-size: 22px; font-weight: bold; color: #6af; margin: 0 0 10px;
@@ -144,6 +144,7 @@
   }
 </style>
 <link rel="stylesheet" href="./touch-controls.css">
+<link rel="stylesheet" href="./moves-panel.css">
 </head>
 <body>
 <script>
@@ -165,9 +166,9 @@
 //               "gameOnly"; written only when it is on). ?view=game and
 //               ?view=full in the address override it either way.
 window.IKEMEN_BRAND = {
-  "title": "Anime Crossover MUGEN",
-  "version": "v1.0",
-  "credit": "Engine: IKEMEN GO (MIT) - Web build: WebMUGEN by energyjp - Characters: Goku by Mikel8888, Vegeta by Shiruzato/Mythos, Dio & Jotaro by Warusaki3, Gojo by RyoumenS, Sukuna by Witherower, Meliodas by Salah, Escanor by Soulfire - Stages: GardenSandLand by MysticG & MatreroG, Pokemon Stadium by Cirio",
+  "title": "Cursed Clash",
+  "version": "v5",
+  "credit": "Engine: IKEMEN GO (MIT) - Characters: Sukuna & Gojo by RyoumenS, Meliodas by Salah, Escanor by Soulfire - Stage: GardenSandLand by MysticG & MatreroG",
   "hideBootUI": 6,
   "identityUrl": "",
   "gameOnly": true
@@ -249,7 +250,7 @@ window.IKEMEN_BRAND = {
 
   // ---- the loading box: title, progress, what it is doing now ----
   var load = mk('div'); load.id = 'goload'; load.setAttribute('role', 'status');
-  var title = mk('div', 'gl-title', b.title || 'WebMUGEN');
+  var title = mk('div', 'gl-title', b.title || 'Cursed Clash');
   if (b.version) title.appendChild(mk('span', 'gl-ver', b.version));
   var track = mk('div', 'gl-track'), fill = mk('div', 'gl-fill');
   track.appendChild(fill);
@@ -506,8 +507,8 @@ window.IKEMEN_BRAND = {
 (function () {
   var b = window.IKEMEN_BRAND || {};
   var t = document.getElementById('apptitle');
-  t.textContent = b.title || 'WebMUGEN';
-  document.title = (b.title || 'WebMUGEN') + (b.version ? ' ' + b.version : '');
+  t.textContent = b.title || 'Cursed Clash';
+  document.title = (b.title || 'Cursed Clash') + (b.version ? ' ' + b.version : '');
   if (b.version) {
     var v = document.createElement('span');
     v.className = 'ver'; v.textContent = b.version; t.appendChild(v);
@@ -1280,6 +1281,8 @@ window.__panics = [];
   }
 })();
 </script>
+<script src="./moves-data.js"></script>
+<script src="./moves-panel.js"></script>
 <script src="./touch-controls.js"></script>
 </body>
 </html>

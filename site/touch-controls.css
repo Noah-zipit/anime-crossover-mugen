@@ -1,11 +1,15 @@
-/* Touch controls for Ashar's Anime Crossover MUGEN (WebMUGEN / IKEMEN GO web).
+/* Touch controls for Cursed Clash (IKEMEN GO web).
  *
  * The engine listens on `document` for keydown/keyup and reads
  * KeyboardEvent.code (see ikemen-go-web src/system_js.go: jsCodeToKey).
  * These on-screen buttons dispatch synthetic KeyboardEvents with the same
  * codes as the P1 keyboard layout (config.ini [Keys_P1]: WASD move,
- * K/L/; = A/B/C, I/O/P = X/Y/Z, Enter = Start), so the engine cannot tell
- * them apart from a real keyboard. No engine code is touched.
+ * K/L/; = A/B/C, I/O/P = X/Y/Z, Enter = Start, Esc = Pause), so the engine
+ * cannot tell them apart from a real keyboard. No engine code is touched.
+ *
+ * Buttons are labelled with what they do (light/medium/heavy punch and
+ * kick, charge/start, pause, moves) — icon above, plain text label below.
+ * The icon itself carries no letters; the label is a separate text element.
  *
  * Shown by default on touch devices (coarse pointer), hidden on desktop.
  * The toggle button (top-right) shows/hides it anywhere; the choice is
@@ -31,14 +35,22 @@
 .tc-cluster { display: flex; gap: 8px; pointer-events: none; }
 .tc-btn {
   pointer-events: auto;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
   border-radius: 10px; border: 1.5px solid #6af;
-  background: #0b0d1280; color: #d6e6ff;
+  background: #0b0d12cc; color: #d6e6ff;
   font: bold 13px/1 system-ui, sans-serif;
   touch-action: none; user-select: none; -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 .tc-btn.pressed { background: #6af; color: #0b0d12; }
+.tc-ic { display: block; line-height: 0; }
+.tc-ic svg { width: 20px; height: 20px; display: block; }
+.tc-ic img { width: 20px; height: 20px; display: block; object-fit: contain; }
+.tc-label {
+  display: block; margin-top: 2px;
+  font: bold 7.5px/1.25 system-ui, sans-serif; letter-spacing: .04em;
+  text-align: center; color: inherit; white-space: nowrap;
+}
 /* D-pad: 3x3 grid, arrows on the cross */
 .tc-dpad {
   display: grid; grid-template-columns: repeat(3, 40px);
@@ -50,17 +62,29 @@
 .tc-dpad .tc-left  { grid-area: 2 / 1; }
 .tc-dpad .tc-right { grid-area: 2 / 3; }
 .tc-dpad .tc-down  { grid-area: 3 / 2; }
-/* Attack buttons: two rows of three */
+/* Attack buttons: two rows of three, labelled with the move they send */
 .tc-atk { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
 .tc-atk .tc-row { display: flex; gap: 6px; }
-.tc-atk .tc-btn { width: 42px; height: 42px; border-radius: 50%; }
-.tc-atk .tc-row.top .tc-btn { border-color: #ff8a7a; }
-.tc-start {
-  width: 42px; height: 42px; border-radius: 50%;
-  font-size: 10px; letter-spacing: .05em;
-}
+.tc-atk .tc-row.top .tc-btn,
+.tc-atk .tc-row.bot .tc-btn { width: 54px; height: 48px; }
+.tc-atk .tc-row.top .tc-btn { border-color: #ff8a3d; color: #ffd9b0; }
+.tc-atk .tc-row.top .tc-btn.pressed { background: #ff8a3d; color: #1a0a00; }
+.tc-atk .tc-row.bot .tc-btn { border-color: #ffc93d; color: #ffe9a8; }
+.tc-atk .tc-row.bot .tc-btn.pressed { background: #ffc93d; color: #1a0a00; }
+/* Utility row: charge/start, pause, moves */
+.tc-atk .tc-row.util .tc-btn { width: 54px; height: 38px; }
+.tc-atk .tc-row.util .tc-ic svg { width: 16px; height: 16px; }
+.tc-atk .tc-row.util .tc-ic img { width: 16px; height: 16px; }
+.tc-charge { border-color: #ff5a2a; color: #ffb199; }
+.tc-charge.pressed { background: #ff5a2a; color: #1a0a00; }
+.tc-pause { border-color: #8fa8c8; color: #d6e6ff; }
+.tc-pause.pressed { background: #8fa8c8; color: #0b0d12; }
+.tc-moves { border-color: #4dd0c4; color: #b8fff6; }
+.tc-moves.pressed { background: #4dd0c4; color: #062a26; }
 @media (max-width: 560px) {
   .tc-dpad { grid-template-columns: repeat(3, 38px); grid-template-rows: repeat(3, 38px); }
   .tc-dpad .tc-btn { width: 38px; height: 38px; }
-  .tc-atk .tc-btn, .tc-start { width: 40px; height: 40px; }
+  .tc-atk .tc-row.top .tc-btn,
+  .tc-atk .tc-row.bot .tc-btn { width: 50px; height: 46px; }
+  .tc-atk .tc-row.util .tc-btn { width: 50px; height: 36px; }
 }

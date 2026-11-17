@@ -1,4 +1,4 @@
-# Credits — Anime Crossover MUGEN
+# Credits — Cursed Clash
 
 A free fan fighting game. Not for sale, not affiliated with any rights holder.
 

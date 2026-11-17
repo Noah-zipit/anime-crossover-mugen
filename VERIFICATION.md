@@ -103,3 +103,89 @@ Ashar's complaint: "Did u fix Goku as well? His character design look bad also S
 
 ### Remaining honest gaps
 - Sukuna's transforms/ultimates not visually proven (only base form + intro + ROUND 1 start). His phone test is still the final gate (first load ~529 MB on mobile data; Mali GPU performance untested). Netplay untested.
+
+---
+
+## v5 "Cursed Clash" — slim 4-character build (2026-11-17)
+
+Live URL: https://anime-crossover-mugen.vercel.app/ (production domain)
+Deployment: dpl_BdqC74gAiSQXdK8azEzpyn66sDSm (READY), same project
+anime-crossover-mugen, Vercel second account. Manifest stamp **3faacd610059**
+(verified by bare manifest.json fetch), 4 pak parts, 228 files, all parts
+HTTP 200. The old v1 deployment URL stays frozen by design.
+
+### Size — honest number: ~190 MB first load, NOT 100 MB
+- Pak 165.62 MB (4 parts ≤ 50 MB, Vercel-safe) + ikemen.wasm 23.92 MB +
+  page assets ~0.30 MB = **189.84 MB**. v4 was ~529 MB (2.79× smaller).
+- Breakdown: characters 137.73 MB (Meliodas 63.05, Gojo 34.89, Sukuna 29.83,
+  Escanor 9.96), stages 4.64 MB, data 20.78 MB (system.sff 14.52 MB).
+- Cut: the other six characters, ~110 MB of `.snd` files, down to 2 stages
+  (Garden + Stadium + 5 defaults), intro videos, `data/system.base.def`
+  (engine verified booting without it).
+- 100 MB is not reachable with these four characters intact: sprites alone
+  are ~137.7 MB and the wasm is a fixed 23.9 MB, so the floor is ~162 MB
+  before stages/data. Reaching ~100 MB would need dropping a character
+  (Meliodas is the biggest at 63 MB) or re-encoding sprites.
+
+### Roster (4)
+Sukuna (Shinjuku, RyoumenS), Gojo (Shinjuku, RyoumenS), Meliodas (Salah),
+Escanor (Soulfire). Deleted: Goku, Vegeta, DIO, Jotaro, Black Polnareff,
+Vanilla Ice. No character sprites or portraits were touched.
+
+### Name and title screen
+**Cursed Clash** — no word "Mugen" anywhere visible. The one rendered
+instance (F1 info box "Welcome to Energy's WebMUGEN!") now reads
+"Welcome to Cursed Clash! (v5)"; the same word in the unused kfm motif was
+also scrubbed. Remaining "mugen" strings are config keys (`mugenversion`)
+and code comments, never rendered. Title background is the Arena fire image
+with "CURSED CLASH" composited in the flame frame; menu moved to y=280 so
+all 7 items (Arcade / VS Mode / Network / Practice / Mission / Watch Mode /
+Options) are readable. Title and select backgrounds were swapped into
+`system.sff` sprites (100,0) and (101,0) with the new reusable tool
+`tools/sff-swap.py` (append-swap, verified by re-parsing and PNG-decoding
+both sprites).
+
+### Command list — 44 real moves
+Taken from the four characters' own `.cmd` files; nothing invented.
+Sukuna 14, Gojo 13, Meliodas 10, Escanor 7. Reachable from the MOVES button
+(top-right) and the touch overlay's MOVES button. Tabs carry the AI-art
+portrait thumbnails (`site/portraits/`); the engine's select portraits still
+come from each character's SFF. The third-party zip's invented `.cmd` files
+were NOT used (no `[State -1]`, invented command names).
+
+### Touch buttons — labelled icons, same keys
+D-pad (WASD) bottom-left. Right cluster: LIGHT / MED / HEAVY PUNCH (fist
+icon, I/O/P), LIGHT / MED / HEAVY KICK (kick icon, K/L/;), CHARGE / START
+(bolt icon, Enter — Start is every kept character's power-charge), PAUSE
+(Escape), MOVES. Icons are the neon graphics from the zip's tiles
+(`site/touch/icons/`). Keys unchanged.
+
+### Tests (phone-landscape 2400×1080, local server port 8123)
+Full probe `verify/v5/probe-v5.js` finished **PROBE V5 DONE**: title, select,
+fight Meliodas vs Escanor t30–t150, MOVES panel open + Gojo tab. Zero panics.
+Console noise only: favicon 404s (harmless, no favicon file) and "Go program
+has already exited" (wasm runtime logging after page navigation/close).
+Stadium stage verified in-engine (Meliodas vs Escanor, timer 99). Select
+screen verified by a dedicated script (title → Arcade → Single Mode →
+select, zero errors). Screenshots in `verify/v5/`: v5-00-title.png,
+v5-01b-select.png, v5-02-fight-t30.png, v5-08-stadium-fight.png,
+v5-03b-moves-gojo.png. His phone test remains the final gate.
+
+### Known limitations
+1. **PAUSE exits the game.** One Escape press during an active fight
+   terminates the engine ("Engine exited"), confirmed twice. Pre-existing
+   engine behaviour in this IKEMEN GO web build, not caused by v5 — the
+   `[Pause Menu]` is defined in the motif but Escape never reaches it here.
+   Tapping PAUSE mid-fight quits the game; a page reload restarts it.
+2. **system.sff carries ~4.5 MB of orphaned sprite data** (old title/select
+   backgrounds left behind by the two re-swaps). A compact would save it but
+   risks breaking palettes, so it was left in.
+
+### Deploy notes
+- APK NOT rebuilt, Google Drive NOT touched (his order; Drive still serves
+  the v2 APK).
+- NOTE: the build tree's `final-spec.json` was still the v4 spec when this
+  repo was refreshed — the repo's `final-spec.json` was set to the v5 spec
+  content here so it describes the live build. The build tree's own
+  `VERIFICATION.md` had no v5 section either; this section was added here
+  from the v5 delivery report.

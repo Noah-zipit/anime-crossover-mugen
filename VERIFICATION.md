@@ -189,3 +189,36 @@ v5-03b-moves-gojo.png. His phone test remains the final gate.
   content here so it describes the live build. The build tree's own
   `VERIFICATION.md` had no v5 section either; this section was added here
   from the v5 delivery report.
+
+---
+
+## v6 — Loading gate, PAUSE to top bar, FULLSCREEN, MOVES panel list visible (2026-11-17, deployed 2026-11-17 ~10:40 UTC)
+
+### Why (his words, from his phone screenshot of the loading screen)
+"Why is the moves and the fuckin pause there bruh add it somewhere else also add a full screen option as well and I meant moves showing list of moves he can do bruh". The screenshot showed the full touch cluster + the MOVES panel (tabs only, no list) on top of the "CURSED CLASH v5 — Downloading game data" loading box.
+
+### What changed (website only; roster, name, size untouched)
+1. **Loading screen is clean now.** `index.html` (+ `play.html`, same page): the game-only script adds `cc-loading` to `<html>` while the loading box is up and removes it (+ fires `cc-booted`) the moment the engine draws its first frames (`dropLoad()`; also removed in `leave()`). CSS hides `#tc-root`, `#tc-toggle`, `#cc-moves-btn`, `#cc-moves`, `#tc-pause-btn`, `#tc-fs-btn`, `#gomenu` under `html.cc-loading`. A tap on MOVES mid-load cannot open the panel visually (probe: panel display stays `none` even after its class toggles).
+2. **PAUSE moved to the top bar.** `touch-controls.js`: the PAUSE entry is out of the fight cluster's util row (cluster keeps punch/kick + CHARGE/START + MOVES). New small text button `#tc-pause-btn` top-right (right: 126px), same Escape keydown/keyup as before — the engine behaviour (Escape quits mid-fight) is unchanged, only the button moved.
+3. **FULLSCREEN button in the top bar.** `#tc-fs-btn` (right: 180px), Fullscreen API on `document.documentElement` (webkit fallback), toggles on second tap, refits the canvas on `fullscreenchange`. Verified entering + exiting in headless Chromium; Android Chrome supports the same API.
+4. **MOVES panel shows the actual move list on a phone.** Root cause: the panel was `bottom: 170px` (clearing the touch cluster), leaving ~125 CSS px on a short landscape phone viewport — head + tabs ate it, the list hid below the fold. Now `bottom: 12px` (panel overlays the cluster while open, which is fine — the player is reading, not fighting) + a `max-height: 500px` tightening (smaller head/tabs/rows). Gojo: 13/13 rows visible, no scroll needed at 2400x1080. `moves-panel.js` also force-closes the panel on `cc-booted`, so a toggle fired during loading can never leave it open on the title screen (caught by the first v6 probe run: the panel appeared open on title with Sukuna's full list — which incidentally proved the list renders — then the force-close was added).
+- Drive-by: `site/README.md` staleness fixed (was "~430 MB" + Goku/Vegeta as shipped; now ~190 MB, v5 cuts listed). `play.html` got the same loading-gate edits as `index.html`.
+
+### v6 test proof (final build, phone-landscape 2400x1080, local server port 8123, probe `verify/v6/probe-v6.js`)
+- Loading: `v6-00-loading.png` — only the CURSED CLASH v5 loading box (4.2/173.7 MB, 2%), nothing else on screen. State: `loadingClass: true`, goload VISIBLE, all seven controls hidden; tap on MOVES mid-load leaves panel display `none`.
+- Title: `v6-01-title.png` — clean title, panel closed, top bar FULLSCREEN | PAUSE | MOVES | TOUCH, cluster without PAUSE. Fullscreen toggle: entered true, exited true.
+- Moves: `v6-02-moves-gojo.png` — Gojo tab, SPECIAL MOVES (skill 1–8, junten ao, hanten aka) + SUPER MOVES (Clash, Muryokusho, Unlimited Hollow), 13/13 rows visible, panel height 1020px.
+- Fight: `v6-03-fight.png` — Meliodas vs Escanor, timer 99, Garden; cluster is punch/kick + CHARGE/START + MOVES, PAUSE only in the top bar.
+- Zero panics/exceptions; only the known cosmetic /favicon.ico 404.
+- Probe notes: first run crashed on `playwright-core` not on the path (fixed with NODE_PATH to another project's node_modules) and on a variable shadowing bug (`fs`); the first full run caught the leftover-open panel, fixed with the `cc-booted` force-close, then re-run clean.
+
+### Deploy
+- Vercel production deploy **dpl_AMFTHvU3HgxTWHKQJk9UwDZeKRxY** (READY, same project anime-crossover-mugen, deploy-files; only 7 changed files uploaded, pak parts already on Vercel). Live: https://anime-crossover-mugen.vercel.app/ — HTTP 200, manifest stamp **3faacd610059** (unchanged — pak untouched), all 4 parts 200, 228 files. New code confirmed live (touch-controls.js has tc-fs-btn/tc-pause-btn, index.html has cc-loading, moves-panel.css has bottom: 12px). ssoProtection untouched (production serves the real page, no login).
+- APK NOT rebuilt, Google Drive NOT touched.
+
+### Size
+- First-load unchanged ≈ **190 MB** (pak 165.62 MB in 4 parts + ikemen.wasm 23.92 MB + ~0.3 MB page/js). No character or size changes in this fix.
+
+### Remaining honest gaps
+- His phone test is still the final gate (loading-gate and fullscreen behaviour on his real moto g54 Chrome, first load on mobile data). Headless fullscreen entering/exiting is proven; the on-phone tap is not.
+- PAUSE still quits the game mid-fight (pre-existing engine behaviour, Escape terminates the engine); only its button moved.

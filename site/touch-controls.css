@@ -25,6 +25,22 @@
   touch-action: manipulation; user-select: none; -webkit-user-select: none;
 }
 #tc-toggle.off { opacity: .45; }
+/* Top-bar PAUSE and FULLSCREEN: same small text-button look as TOUCH.
+   Right edge order: TOUCH (10), MOVES (62, in moves-panel.css),
+   PAUSE (126), FULLSCREEN (180). Hidden while loading (see index.html). */
+#tc-pause-btn, #tc-fs-btn {
+  position: fixed; top: 10px; z-index: 960;
+  height: 28px; border-radius: 7px;
+  border: 2px solid #6af; background: #0b0d12cc; color: #d6e6ff;
+  font: bold 10px/1 system-ui, sans-serif; letter-spacing: .08em;
+  cursor: pointer; padding: 0 8px;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+#tc-pause-btn { right: 126px; }
+#tc-pause-btn.pressed { background: #6af; color: #0b0d12; }
+#tc-fs-btn { right: 180px; }
+#tc-fs-btn.on { background: #6af; color: #0b0d12; }
 #tc-root {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 940;
   display: flex; justify-content: space-between; align-items: flex-end;
@@ -71,14 +87,12 @@
 .tc-atk .tc-row.top .tc-btn.pressed { background: #ff8a3d; color: #1a0a00; }
 .tc-atk .tc-row.bot .tc-btn { border-color: #ffc93d; color: #ffe9a8; }
 .tc-atk .tc-row.bot .tc-btn.pressed { background: #ffc93d; color: #1a0a00; }
-/* Utility row: charge/start, pause, moves */
+/* Utility row: charge/start, moves */
 .tc-atk .tc-row.util .tc-btn { width: 54px; height: 38px; }
 .tc-atk .tc-row.util .tc-ic svg { width: 16px; height: 16px; }
 .tc-atk .tc-row.util .tc-ic img { width: 16px; height: 16px; }
 .tc-charge { border-color: #ff5a2a; color: #ffb199; }
 .tc-charge.pressed { background: #ff5a2a; color: #1a0a00; }
-.tc-pause { border-color: #8fa8c8; color: #d6e6ff; }
-.tc-pause.pressed { background: #8fa8c8; color: #0b0d12; }
 .tc-moves { border-color: #4dd0c4; color: #b8fff6; }
 .tc-moves.pressed { background: #4dd0c4; color: #062a26; }
 @media (max-width: 560px) {

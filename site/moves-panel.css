@@ -12,7 +12,7 @@
   touch-action: manipulation; user-select: none; -webkit-user-select: none;
 }
 #cc-moves {
-  position: fixed; top: 48px; right: 8px; bottom: 170px; z-index: 950;
+  position: fixed; top: 48px; right: 8px; bottom: 12px; z-index: 950;
   width: min(370px, calc(100vw - 16px));
   display: flex; flex-direction: column;
   background: #140a08f2; border: 1.5px solid #ff8a3d; border-radius: 12px;
@@ -61,6 +61,18 @@
 .cc-btn.lp, .cc-btn.mp, .cc-btn.hp { background: #ff8a3d; color: #1a0a00; }
 .cc-btn.lk, .cc-btn.mk, .cc-btn.hk { background: #ffc93d; color: #1a0a00; }
 .cc-btn.start { background: #8fa8c8; color: #0b0d12; }
-@media (max-width: 560px) {
-  #cc-moves { bottom: 150px; }
+/* A short landscape phone frame: the panel now runs nearly full height
+   (bottom: 12px above), and the rows tighten so more moves fit on screen
+   at once instead of hiding below the fold. The list still scrolls inside
+   the panel (see .cc-body) for the rest. */
+@media (max-height: 500px) {
+  #cc-moves { top: 44px; }
+  .cc-head { padding: 6px 10px; }
+  .cc-tabs { padding: 6px 8px 0; }
+  .cc-tab { padding: 4px 4px; font-size: 10px; }
+  .cc-tab-img { width: 18px; height: 18px; }
+  .cc-body { padding: 4px 8px 8px; }
+  .cc-sec { margin: 7px 0 3px; }
+  .cc-row { padding: 4px 0; }
+  .cc-chip { min-width: 18px; height: 18px; font-size: 10px; }
 }

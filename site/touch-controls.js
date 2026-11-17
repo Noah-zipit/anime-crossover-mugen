@@ -28,7 +28,6 @@
     bolt: 'touch/icons/charge.png'
   };
   var SVG = {
-    pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4.5" width="3.6" height="15" rx="1" fill="currentColor"/><rect x="14.4" y="4.5" width="3.6" height="15" rx="1" fill="currentColor"/></svg>',
     list: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="4.4" cy="6" r="1.5" fill="currentColor"/><circle cx="4.4" cy="12" r="1.5" fill="currentColor"/><circle cx="4.4" cy="18" r="1.5" fill="currentColor"/><rect x="8.4" y="4.8" width="11.2" height="2.4" rx="1.2" fill="currentColor"/><rect x="8.4" y="10.8" width="11.2" height="2.4" rx="1.2" fill="currentColor"/><rect x="8.4" y="16.8" width="11.2" height="2.4" rx="1.2" fill="currentColor"/></svg>'
   };
 
@@ -48,8 +47,11 @@
     { row: 'bot', kind: 'kick', icon: 'boot', lines: ['MED', 'KICK'], code: 'KeyL', key: 'l' },
     { row: 'bot', kind: 'kick', icon: 'boot', lines: ['HEAVY', 'KICK'], code: 'Semicolon', key: ';' },
     // Utility row: CHARGE is Enter (Start) = every kept character's power charge.
-    { row: 'util', kind: 'charge', icon: 'bolt', lines: ['CHARGE', 'START'], code: 'Enter', key: 'Enter' },
-    { row: 'util', kind: 'pause', icon: 'pause', lines: ['PAUSE'], code: 'Escape', key: 'Escape' }
+    { row: 'util', kind: 'charge', icon: 'bolt', lines: ['CHARGE', 'START'], code: 'Enter', key: 'Enter' }
+    // PAUSE is NOT in the cluster any more (2026-11-17: it sits in the top
+    // bar next to MOVES / TOUCH). It still sends the same Escape keydown/
+    // keyup as before; the engine behaviour (Escape quits mid-fight) is
+    // unchanged, only the button moved.
   ];
 
   function dispatch(type, code, key) {
@@ -161,7 +163,7 @@
     BTNS.slice(7, 10).forEach(function (def) { bot.appendChild(makeButton(def)); });
     var util = document.createElement('div');
     util.className = 'tc-row util';
-    BTNS.slice(10, 12).forEach(function (def) { util.appendChild(makeButton(def)); });
+    BTNS.slice(10, 11).forEach(function (def) { util.appendChild(makeButton(def)); });
     util.appendChild(makeMovesButton());
     atk.appendChild(top);
     atk.appendChild(bot);
@@ -179,6 +181,61 @@
     toggle.title = 'Show / hide touch controls';
     toggle.setAttribute('aria-label', 'Show or hide touch controls');
     document.body.appendChild(toggle);
+
+    // PAUSE lives in the top bar now, not in the fight cluster. Same key as
+    // before (Escape down on press, up on release); the engine still quits
+    // mid-fight on it, only the button moved. It is a plain text button
+    // like MOVES / TOUCH, no letters inside an icon.
+    var pauseBtn = document.createElement('button');
+    pauseBtn.id = 'tc-pause-btn';
+    pauseBtn.type = 'button';
+    pauseBtn.textContent = 'PAUSE';
+    pauseBtn.title = 'Pause (Esc)';
+    pauseBtn.setAttribute('aria-label', 'Pause');
+    pauseBtn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    pauseBtn.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      pauseBtn.classList.add('pressed');
+      dispatch('keydown', 'Escape', 'Escape');
+    });
+    var pauseUp = function (e) {
+      if (e) e.preventDefault();
+      pauseBtn.classList.remove('pressed');
+      dispatch('keyup', 'Escape', 'Escape');
+    };
+    pauseBtn.addEventListener('pointerup', pauseUp);
+    pauseBtn.addEventListener('pointercancel', pauseUp);
+    pauseBtn.addEventListener('click', function () { pauseBtn.blur(); });
+    document.body.appendChild(pauseBtn);
+
+    // FULLSCREEN in the top bar: Fullscreen API on the document element,
+    // toggle on second tap. Works on Android Chrome. On change, the canvas
+    // is refit to the new viewport.
+    var fsBtn = document.createElement('button');
+    fsBtn.id = 'tc-fs-btn';
+    fsBtn.type = 'button';
+    fsBtn.textContent = 'FULLSCREEN';
+    fsBtn.title = 'Toggle fullscreen';
+    fsBtn.setAttribute('aria-label', 'Toggle fullscreen');
+    fsBtn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    fsBtn.addEventListener('click', function () {
+      try {
+        if (document.fullscreenElement) { document.exitFullscreen(); }
+        else {
+          var el = document.documentElement;
+          if (el.requestFullscreen) el.requestFullscreen();
+          else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        }
+      } catch (e) { /* fullscreen unavailable here */ }
+      fsBtn.blur();
+    });
+    document.body.appendChild(fsBtn);
+    document.addEventListener('fullscreenchange', function () {
+      fsBtn.classList.toggle('on', !!document.fullscreenElement);
+      var canvas = document.querySelector('body > canvas');
+      if (canvas && window.ikemenGameOnlyUI) window.ikemenGameOnlyUI.fit(canvas);
+      else if (canvas && window.ikemenFitCanvas) window.ikemenFitCanvas();
+    });
 
     var KEY = 'acm-touch-visible';
     function isTouchDevice() {

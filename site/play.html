@@ -72,6 +72,17 @@
     #goload .gl-steps { min-height: 17px; padding-top: 6px; }
     #goload .gl-steps div:not(.cur) { display: none; }
   }
+  /* While the game is still loading, the page IS the loading box and
+     nothing else: no touch buttons, no MOVES button or panel, no MENU,
+     no fullscreen. The class comes off (and 'cc-booted' fires) the moment
+     the engine draws its first frames. */
+  html.cc-loading #tc-root,
+  html.cc-loading #tc-toggle,
+  html.cc-loading #cc-moves-btn,
+  html.cc-loading #cc-moves,
+  html.cc-loading #tc-pause-btn,
+  html.cc-loading #tc-fs-btn,
+  html.cc-loading #gomenu { display: none !important; }
   /* the MENU button: hidden until the pointer moves */
   #gomenu { position: fixed; top: 10px; left: 10px; z-index: 900; display: flex; align-items: center; gap: 8px;
             margin: 0; padding: 7px 11px 7px 9px; cursor: pointer; background: #0b0d12; border: 2px solid #6af;
@@ -260,6 +271,10 @@ window.IKEMEN_BRAND = {
   load.appendChild(title); load.appendChild(track); load.appendChild(nums); load.appendChild(steps);
   shield(load);
   document.body.appendChild(load);
+  // The page is the loading box until the engine draws: touch controls,
+  // the MOVES button/panel, MENU and fullscreen stay hidden (see the
+  // html.cc-loading rules above). The class comes off in dropLoad().
+  document.documentElement.classList.add('cc-loading');
   var stepRows = [], stepAt = 0, ticker = null, downloaded = false, gotAny = false;
   var addStep = function (text) {
     if (!load) return;
@@ -285,6 +300,8 @@ window.IKEMEN_BRAND = {
     if (!load) return;
     var box = load; load = null;
     clearInterval(ticker);
+    document.documentElement.classList.remove('cc-loading');
+    window.dispatchEvent(new CustomEvent('cc-booted'));
     box.classList.add('out');
     setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 220);
   };
@@ -439,6 +456,8 @@ window.IKEMEN_BRAND = {
     window.ikemenGameOnly = false;
     window.ikemenGameOnlyUI = null;
     clearInterval(watch); clearInterval(ticker); clearTimeout(hideTimer);
+    document.documentElement.classList.remove('cc-loading');
+    window.dispatchEvent(new CustomEvent('cc-booted'));
     document.documentElement.classList.remove('gameonly');
     home.parent.insertBefore(chrome, home.next && home.next.parentNode === home.parent ? home.next : null);
     var canvas = document.querySelector('body > canvas');

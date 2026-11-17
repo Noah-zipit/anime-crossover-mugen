@@ -116,6 +116,13 @@
     document.body.appendChild(panel);
     render(current);
 
+    // The panel starts closed and must STAY closed until the player opens
+    // it: a toggle that fired while the page was still loading (the button
+    // is hidden then, but a programmatic or keyboard click can still land)
+    // must not leave it open on the title screen. 'cc-booted' fires the
+    // moment the engine draws its first frames.
+    window.addEventListener('cc-booted', function () { panel.classList.add('hidden'); });
+
     var barBtn = document.createElement('button');
     barBtn.id = 'cc-moves-btn';
     barBtn.type = 'button';

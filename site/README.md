@@ -27,9 +27,11 @@ of the Studio. Nothing about the engine was rewritten. See `CREDITS.md`.
 
 - **Mahoraga** — no free, working community character could be found.
 - **Goku (Ismael Perez, incl. Ultra Instinct)** — found, but 128 MB for one
-  character; the shipped Goku covers Base / Kaioken / Super Saiyan Blue.
-- **Vegeta SSGSS (Blizzard)** — found, but Super Saiyan Blue only; the
-  shipped Vegeta covers all six forms.
+  character; cut in the v5 slim build (roster is Sukuna, Gojo, Meliodas,
+  Escanor only).
+- **Vegeta (JUS, all six forms)** — shipped in v2–v4, cut in the v5 slim build.
+- **DIO, Jotaro, Black Polnareff, Vanilla Ice, Goku SSJ3** — shipped in
+  v2–v4, cut in the v5 slim build.
 - **Gojo (WR-Gojo, Witherower)** — found, but 165 MB for one character;
   the shipped Gojo is the Shinjuku version.
 - **City Metro stage, The Pit stage, SF2 Bison stage pack** — found, but
@@ -37,7 +39,7 @@ of the Studio. Nothing about the engine was rewritten. See `CREDITS.md`.
 
 ## Limits
 
-- First load downloads the whole game (~430 MB including the engine);
+- First load downloads the whole game (~190 MB including the engine);
   everything is cached by the browser afterwards.
 - Desktop browser recommended (Chrome/Edge/Brave with hardware
   acceleration). Heavy characters can hitch; the browser build is
